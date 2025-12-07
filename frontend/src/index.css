@@ -1,0 +1,629 @@
+/* Сброс и базовая типографика */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #f5f7fb;
+  color: #1f2933;
+}
+
+/* Общий контейнер приложения */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Публичный header */
+.public-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 32px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.public-header .logo {
+  font-weight: 800;
+  font-size: 20px;
+  text-decoration: none;
+  color: #111827;
+}
+
+.public-header nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.public-header nav a:hover {
+  color: #2563eb;
+}
+
+/* Приватный header */
+.private-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 32px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.private-header .left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo-btn {
+  border: none;
+  background: none;
+  font-weight: 800;
+  font-size: 20px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-nav > a {
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.top-nav > a:hover {
+  color: #2563eb;
+}
+
+/* Dropdown меню */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #4b5563;
+  padding: 6px 10px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-btn:hover {
+  background: #eef2ff;
+  color: #1d4ed8;
+}
+
+.nav-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 8px 0;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+  display: none;
+}
+
+.nav-dropdown:hover .nav-menu {
+  display: block;
+}
+
+.nav-menu a {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.nav-menu a:hover {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* Правая часть хедера */
+.private-header .right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logout-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.logout-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Значок статуса пользователя */
+.user-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #f9fafb;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+/* Цвета статусов */
+.status-active {
+  background: #22c55e;
+}
+
+.status-blocked {
+  background: #ef4444;
+}
+
+/* Основная область */
+.private-main,
+.public-main {
+  flex: 1;
+  padding: 24px 32px 40px;
+}
+
+/* Карточки и layout */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+  margin-bottom: 20px;
+}
+
+/* Кнопки по умолчанию */
+.btn-primary {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+/* Простенькая форма */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.form label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3);
+}
+.site-header {
+  background: #ffffff;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.site-header-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.center-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.link-muted {
+  text-decoration: none;
+  color: #374151;
+}
+
+.btn-primary {
+  padding: 6px 12px;
+  background: #2563eb;
+  color: white !important;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.btn-secondary {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #6b7280;
+  cursor: pointer;
+  background: none;
+}
+
+/* ---------------------- */
+/*     DARK THEME BASE     */
+/* ---------------------- */
+
+:root {
+  --bg-main: #0d1117;
+  --bg-card: #161b22;
+  --bg-header: #0d1117;
+
+  --text-main: #e6edf3;
+  --text-muted: #9da5b4;
+
+  --border-color: #30363d;
+
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+}
+
+/* Стиль всего приложения */
+body {
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Карточки */
+.card {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+/* Текст */
+.page-title {
+  color: var(--text-main);
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+}
+
+/* Кнопки */
+.btn-primary {
+  padding: 10px 18px;
+  background: var(--accent);
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  padding: 10px 18px;
+  background: transparent;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #1f242c;
+}
+
+/* Ссылки */
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* ---------------------- */
+/*   NAVBAR DARK THEME    */
+/* ---------------------- */
+
+.site-header {
+  background: var(--bg-header) !important;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.logo {
+  color: var(--text-main);
+}
+
+.link-muted {
+  color: var(--text-muted);
+}
+
+.center-nav a {
+  color: var(--text-main);
+}
+/* Подменю под навбаром */
+.navbar-submenu-wrapper {
+  background: #020617; /* чуть темнее фона */
+  border-bottom: 1px solid #111827;
+  animation: submenu-drop 0.25s ease-out;
+}
+
+.navbar-submenu {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 24px 18px;
+  display: flex;
+  gap: 16px;
+}
+
+.submenu-card {
+  flex: 1;
+  text-align: left;
+  background: #0b1220;
+  border-radius: 12px;
+  border: 1px solid #1f2937;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+  color: #e5e7eb;
+}
+
+.submenu-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.7);
+  border-color: #3b82f6;
+  background: radial-gradient(circle at top left, #1d2a5a, #020617);
+}
+
+.submenu-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.submenu-card-desc {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* Анимация выпадения блока подменю */
+@keyframes submenu-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-submenu {
+    flex-direction: column;
+  }
+}
+.table-input {
+  width: 100%;
+  border-spacing: 6px;
+  table-layout: fixed;          /* чтобы колонки были фиксированной ширины */
+}
+
+.table-input th,
+.table-input td {
+  padding: 4px 6px;
+  text-align: center;
+}
+
+/* все инпуты поменьше */
+.table-input input {
+  width: 100%;
+  max-width: 110px;             /* тут регулируешь ширину колонок, кроме первой */
+  font-size: 14px;
+  padding: 4px 6px;
+}
+
+/* первая колонка (Название) шире остальных */
+.table-input td:first-child input {
+  max-width: 220px;
+  text-align: left;
+}
+.table-input th {
+  font-size: 13px;
+  font-weight: 500;
+}
+/* Таблица с рудами */
+.ores-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.ores-table thead th {
+  text-align: center;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ores-table tbody td {
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* полосатые строки */
+.ores-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* номер строки */
+.ores-table .cell-index {
+  width: 40px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* название руды */
+.ores-table .cell-name {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* числовые значения — выравниваем вправо и делаем табличные цифры */
+.ores-table .cell-num {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ячейка с кнопкой */
+.ores-table .cell-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.form-row span {
+  opacity: 0.9;
+}
+
+.form-row input {
+  width: 100%;
+}
+
+.subcard {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.subcard-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.metrics-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  margin: 0;
+}
+
+.metrics-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.metrics-list dt {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.metrics-list dd {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
