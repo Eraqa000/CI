@@ -10,6 +10,8 @@ export const pool = new Pool({
     database: process.env.PGDATABASE,
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
+    ssl: { rejectUnauthorized: false }, // для Render Postgres
+
 });
 
 export async function testDbConnection(){
