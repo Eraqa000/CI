@@ -2,10 +2,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PublicLayout from "./routes/PublicLayout";
 import PrivateLayout from "./routes/PrivateLayout";
 import RequireAuth from "./routes/RequireAuth";
+import AdminRoute from "./routes/AdminRoute";
+
 
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import AuthContainer from "./components/AuthContainer";  // <-- новый компонент
 import Dashboard from "./pages/Dashboard";
 
 // Task1
@@ -25,6 +26,9 @@ import Task3Calc1 from "./pages/task3/Calc1";
 import Task3Calc2 from "./pages/task3/Calc2";
 import Task3Calc3 from "./pages/task3/Calc3";
 
+
+import AdminPanel from "./pages/admin/AdminPanel";
+
 function App() {
   return (
     <BrowserRouter>
@@ -32,8 +36,8 @@ function App() {
         {/* Публичные страницы */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<AuthContainer />} />
+          <Route path="/register" element={<AuthContainer />} />
         </Route>
 
         {/* Закрытая зона */}
@@ -63,9 +67,14 @@ function App() {
           <Route path="task3/calc1" element={<Task3Calc1 />} />
           <Route path="task3/calc2" element={<Task3Calc2 />} />
           <Route path="task3/calc3" element={<Task3Calc3 />} />
+
+
+          <Route element={<AdminRoute />}>
+            <Route path="admin" element={<AdminPanel />} />
+          </Route>
         </Route>
 
-        {/* Всё остальное редиректим на главную */}
+        {/* Редирект на главную */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

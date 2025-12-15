@@ -36,60 +36,56 @@ export default function Register() {
   };
 
   return (
-    <div className="page-container">
-      <h1 className="page-title">Регистрация</h1>
-      <p className="page-subtitle">
-        Создайте аккаунт, чтобы использовать калькуляторы и ML-модели.
-      </p>
+    <div className="auth-page">
 
-      <div className="card">
-        <form className="form" onSubmit={handleSubmit}>
-          <div>
-            <label>Имя пользователя</label>
-            <input
-              type="text"
-              placeholder="Ваше имя"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Пароль</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-          </div>
+      <video
+          className="auth-bg-video"
+          src="/videos/bg.mov"
+          autoPlay
+          loop
+          muted
+          playsInline
+      />
 
-          {error && (
-            <p style={{ color: "red", fontSize: 14, marginTop: 4 }}>
-              {error}
+      <div className="auth-content">
+        <div className="page-container">
+          <h1 className="page-title">Регистрация</h1>
+          <p className="page-subtitle">
+            Создайте аккаунт, чтобы использовать калькуляторы и ML-модели.
+          </p>
+
+          <div className="card">
+            <form className="form" onSubmit={handleSubmit}>
+              <div className="form-field">
+                <label>Имя пользователя</label>
+                <input type="text" value={fullName} placeholder="login" onChange={(e) => setFullName(e.target.value)} />
+              </div>
+
+              <div className="form-field">
+                <label>Email</label>
+                <input type="email" value={email} placeholder="you@example.com" onChange={(e) => setEmail(e.target.value)} />
+              </div>
+
+              <div className="form-field">
+                <label>Пароль</label>
+                <input type="password" value={password} placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+              </div>
+
+              {error && <p className="form-error">{error}</p>}
+
+              <button type="submit" className="btn-primary" disabled={loading}>
+                {loading ? "Создаём..." : "Зарегистрироваться"}
+              </button>
+            </form>
+
+            
+
+
+            <p style={{ marginTop: 16, fontSize: 14 }}>
+              Есть аккаунт? <Link to="/login">Войти</Link>
             </p>
-          )}
-
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Создаём..." : "Зарегистрироваться"}
-          </button>
-        </form>
-
-        <p style={{ marginTop: 16, fontSize: 14 }}>
-          Есть аккаунт? <Link to="/login">Войти</Link>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 // src/api/task1.js
 import { getAuthFromStorage } from "./auth";
 
-const host = window.location.hostname; // localhost или 192.168.56.1 и т.п.
-export const API_URL = `http://${host}:4000`;
+
+export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 function authHeader() {
   const { token } = getAuthFromStorage();

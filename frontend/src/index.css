@@ -269,7 +269,7 @@ body {
   border-color: #2563eb;
   box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3);
 }
-.site-header {
+/*.site-header {
   background: #ffffff;
   padding: 12px 0;
   border-bottom: 1px solid #e5e7eb;
@@ -282,7 +282,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
+}*/
 
 .logo {
   font-size: 22px;
@@ -412,7 +412,33 @@ a:hover {
   background: var(--bg-header) !important;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-main);
+
+  /* вместо sticky делаем обычный относительный блок */
+  position: relative;
+  z-index: 100;
 }
+
+.site-header-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gooey-nav-container,
+.center-nav {
+  overflow: hidden !important;
+}
+nav {
+  overflow: hidden !important;
+}*/
+.gooey-nav-container {
+  position: relative;
+  height: 48px; /* фиксируем высоту линии меню */
+}
+
 
 .logo {
   color: var(--text-main);
@@ -626,4 +652,534 @@ a:hover {
   font-size: 13px;
   font-weight: 600;
   margin: 0;
+}
+/* ------------------------------ */
+/*   ВИЗУАЛЬНО УЛУЧШЕННЫЕ ФОРМЫ   */
+/*   ТЕПЕРЬ ТОЛЬКО ДЛЯ AUTH       */
+/* ------------------------------ */
+
+.auth-page .page-container {
+  max-width: 420px;
+  margin: 40px auto 0;
+  padding: 0 20px;
+}
+
+.auth-page .page-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.auth-page .page-subtitle {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 26px;
+}
+
+.auth-page .card {
+  background: var(--bg-card);
+  padding: 28px 30px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  backdrop-filter: blur(3px);
+}
+
+.auth-page .form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-page .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-page .form label {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-bottom: 6px;
+  color: white;
+}
+
+.auth-page .form input {
+  padding: 10px 12px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-main);
+  transition: 0.18s ease;
+}
+
+.auth-page .form input::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+.auth-page .form input:focus {
+  border-color: var(--accent);
+  background: rgba(59,130,246,0.08);
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
+  outline: none;
+}
+
+.auth-page .btn-primary {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 4px;
+
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  border-radius: 10px;
+  border: none;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-page .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+}
+
+.auth-page .card p {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 14px;
+}
+/* Профиль кнопка */
+.profile-dropdown-wrapper {
+  position: relative;
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: 0.2s;
+}
+
+.profile-btn:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.profile-avatar {
+  width: 28px;
+  height: 28px;
+  background: #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+}
+
+.arrow {
+  opacity: 0.6;
+}
+
+/* Карточка профиля */
+.profile-card {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  width: 260px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  animation: dropdown 0.25s ease-out;
+  z-index: 100;
+}
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pc-avatar {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  background: #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.pc-name {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.pc-email {
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+
+.pc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.pc-row:last-child {
+  border-bottom: none;
+}
+
+.pc-logout {
+  margin-top: 18px;
+  width: 100%;
+  background: #ef4444;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.pc-logout:hover {
+  background: #dc2626;
+}
+
+/* ==== Видео-фон ==== */
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+/* Тёмный полупрозрачный оверлей */
+.auth-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+/* Контент поверх фона */
+.auth-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.auth-content .card {
+  background: rgba(22, 27, 34, 0.75);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+}
+
+/* --- Адаптивные таблицы --- */
+.ores-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.ores-table {
+  min-width: 900px; /* таблица не сжимается */
+}
+
+/* --- Адаптивные формы --- */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .form-row input {
+    font-size: 14px;
+  }
+}
+
+/* --- Скрываем GooeyNav на телефоне --- */
+@media (max-width: 768px) {
+  .center-nav {
+    display: none !important;
+  }
+}
+
+.burger-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .burger-btn {
+    display: block;
+  }
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* --- Мобильное меню --- */
+  .mobile-menu {
+    position: fixed;
+    top: 60px; /* высота хедера */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+
+    background: #0d1117;
+    border-top: 1px solid #30363d;
+
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+
+    overflow-y: auto;
+    z-index: 999; /* поверх всего */
+  }
+
+  .mobile-menu.open {
+    display: flex;
+  }
+
+  /* элементы меню */
+  .mobile-nav-item {
+    padding: 12px 14px;
+    background: #161b22;
+    border-radius: 8px;
+    color: white;
+    border: 1px solid #30363d;
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .mobile-login,
+  .mobile-logout {
+    padding: 12px 14px;
+    background: #2563eb;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 14px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    right: 0;
+    width: 220px;
+    transform: translateX(20%);
+  }
+}
+
+.mobile-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 12px;
+  margin-top: 6px;
+}
+
+.mobile-submenu-item {
+  background: #111827;
+  border: 1px solid #30363d;
+  color: white;
+  border-radius: 6px;
+  padding: 10px;
+  text-align: left;
+  font-size: 15px;
+}
+/* --- Адаптивный wrapper для таблиц --- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Уменьшаем таблицы на телефонах */
+@media (max-width: 768px) {
+  .table-input th,
+  .table-input td,
+  .ores-table th,
+  .ores-table td {
+    padding: 6px 4px;
+    font-size: 12px;
+  }
+
+  /* Поля ввода */
+  .table-input input {
+    padding: 6px;
+    font-size: 13px;
+  }
+
+  /* Заголовки таблиц */
+  .table-input th,
+  .ores-table th {
+    white-space: nowrap;
+  }
+
+  /* Кнопка Добавить руду */
+  .table-input button.btn-primary {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  /* Делаем таблицу скроллируемой */
+  .ores-table {
+    min-width: 900px;
+  }
+
+  /* Карточный вид на малых экранах */
+  .ores-table-card {
+    display: none;
+  }
+}
+
+/* --- Супер-маленькие экраны (iPhone SE) --- */
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .page-subtitle {
+    font-size: 12px;
+  }
+
+  .table-input th,
+  .table-input td {
+    font-size: 11px;
+  }
+
+  .table-input input {
+    font-size: 12px;
+  }
+
+  /* Кнопка Удалить — компактнее */
+  .cell-actions .btn-secondary {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+/* --- MOBILE FORM LAYOUT --- */
+@media (max-width: 768px) {
+  /* Скрываем заголовки таблицы */
+  .table-input thead {
+    display: none;
+  }
+
+  /* Каждая строка — блочная */
+  .table-input tr {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  /* Каждая ячейка — блок */
+  .table-input td {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Поля ввода крупнее */
+  .table-input input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  /* Красивая подпись вместо заголовков таблицы */
+  .table-input td::before {
+    content: attr(data-label);
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+
+  /* Кнопка по центру */
+  .table-input td[colspan] {
+    text-align: center !important;
+  }
+}
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* чтобы таблица не “схлопывалась” */
+.users-table {
+  width: 100%;
+  min-width: 520px; /* или больше если много колонок */
+  border-collapse: collapse;
+}
+
+/* часто на телефоне td становится “невидимым” из-за цвета/фон */
+.users-table td,
+.users-table th {
+  color: var(--text-main);
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }

@@ -3,10 +3,13 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+export { authMiddleware };
 import { pool, testDbConnection } from "./db.js";
 import oreSamplesRoutes from "./routes/oreSamplesRoutes.js";
 import { computeTask1 } from "./controllers/task1Controller.js";
 import task1MlRoutes from "./routes/task1MlRoutes.js";
+import jobRoutes from "./routes/jobRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 
 dotenv.config();
@@ -141,14 +144,41 @@ app.post("/api/auth/login", async (req, res) => {
     }
 
     const token = signToken(user);
-    delete user.password_hash; 
 
-    res.json({ token, user });
+    // ---------------------------
+    // 🔥 1) Обновляем дату последнего входа
+    // ---------------------------
+    await pool.query(
+      "UPDATE users SET last_login_at = NOW() WHERE id = $1",
+      [user.id]
+    );
+
+    // ---------------------------
+    // 🔥 2) Делаем повторный SELECT, чтобы получить обновлённые поля
+    // ---------------------------
+    const updated = await pool.query(
+      "SELECT id, email, full_name, role, status, created_at, last_login_at FROM users WHERE id = $1",
+      [user.id]
+    );
+
+    const updatedUser = updated.rows[0];
+
+    // ---------------------------
+    // 🔥 3) Удаляем password_hash, если он был в user
+    // ---------------------------
+    delete updatedUser.password_hash;
+
+    // ---------------------------
+    // 🔥 4) Возвращаем токен и обновлённого пользователя
+    // ---------------------------
+    res.json({ token, user: updatedUser });
+
   } catch (err) {
     console.error("POST /api/auth/login error:", err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 
 app.get("/api/auth/me", authMiddleware, async (req, res) => {
@@ -191,6 +221,9 @@ app.use("/api/task1/samples", authMiddleware, oreSamplesRoutes);
 app.use("/api/task1", authMiddleware, task1MlRoutes);
 // Вычисления для первой задачи
 app.post("/api/task1/compute", authMiddleware, computeTask1);
+app.use("/api/jobs", jobRoutes);
+app.use("/api/admin", adminRoutes);
+
 
 
 app.listen(PORT, async () => {

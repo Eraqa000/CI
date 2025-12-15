@@ -228,81 +228,23 @@ export default function Task1Direct() {
               </p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {/* Штейн */}
                 <div className="subcard">
-                  <div className="subcard-title">Результаты штейна</div>
+                  <div className="subcard-title">Итоговые массы</div>
                   <dl className="metrics-list">
                     <div>
-                      <dt>Медь Cu, %</dt>
-                      <dd>{result.matte.cu_pct.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>Железо Fe, %</dt>
-                      <dd>{result.matte.fe_pct.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>Сера S, %</dt>
-                      <dd>{result.matte.s_pct.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>Золото Au, г/т</dt>
-                      <dd>{result.matte.au_gpt.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>Серебро Ag, г/т</dt>
-                      <dd>{result.matte.ag_gpt.toFixed(2)}</dd>
-                    </div>
-                  </dl>
-                </div>
-
-                {/* Шлак */}
-                <div className="subcard">
-                  <div className="subcard-title">Результаты шлака</div>
-                  <dl className="metrics-list">
-                    <div>
-                      <dt>SiO₂, %</dt>
-                      <dd>{result.slag.sio2_pct.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>CaO, %</dt>
-                      <dd>{result.slag.cao_pct.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>Al₂O₃, %</dt>
-                      <dd>{result.slag.al2o3_pct.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>FeO, %</dt>
-                      <dd>{result.slag.feo_pct.toFixed(2)}</dd>
+                      <dt>Масса штейна, т</dt>
+                      <dd>{result.matte_mass.toFixed(3)}</dd>
                     </div>
                     <div>
                       <dt>Масса шлака, т</dt>
-                      <dd>{result.slag.mass_t.toFixed(3)}</dd>
-                    </div>
-                  </dl>
-                </div>
-
-                {/* Сводка */}
-                <div className="subcard">
-                  <div className="subcard-title">Сводные показатели</div>
-                  <dl className="metrics-list">
-                    <div>
-                      <dt>Нагрузка по сере, %</dt>
-                      <dd>{result.summary.sulfur_load_pct.toFixed(2)}</dd>
-                    </div>
-                    <div>
-                      <dt>Основность шлака</dt>
-                      <dd>
-                        {result.summary.slag_basicity != null
-                          ? result.summary.slag_basicity.toFixed(3)
-                          : "—"}
-                      </dd>
+                      <dd>{result.slag_mass.toFixed(3)}</dd>
                     </div>
                   </dl>
                 </div>
               </div>
             )}
           </section>
+
         </div>
 
         {/* КНОПКА СНИЗУ */}

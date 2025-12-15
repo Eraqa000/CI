@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { fetchOreSamples } from "../../api/oreSamples";
 import { computeTask1 } from "../../api/task1";
 import { useNavigate } from "react-router-dom";
+import {
+  createJob,
+  saveJobInput,
+  saveJobResult
+} from "../../api/jobs";
 
 export default function Task1Compute() {
   const [samples, setSamples] = useState([]);
@@ -37,31 +42,61 @@ export default function Task1Compute() {
   }, []);
 
   const handleCompute = async () => {
-    try {
-      setComputing(true);
-      setError(null);
+  try {
+    setComputing(true);
+    setError(null);
 
-      if (samples.length === 0) {
-        setError("Нет руд для расчёта");
-        return;
-      }
-
-      // пока считаем все руды; позже можно сделать чекбоксы
-      const oreIds = samples.map((s) => s.id);
-
-      const data = await computeTask1(oreIds);
-
-      // сохраним результат для страницы Results
-      sessionStorage.setItem("task1_last_results", JSON.stringify(data));
-
-      navigate("/app/task1/results");
-    } catch (err) {
-      console.error(err);
-      setError(err.message || "Ошибка вычисления");
-    } finally {
-      setComputing(false);
+    if (selected.size === 0) {
+      setError("Выберите хотя бы одну руду");
+      return;
     }
-  };
+
+    const oreIds = [...selected];
+
+    // 1. Создаём job
+    const job = await createJob("calculator_calc1");
+
+    // 2. Сохраняем входные данные
+    await saveJobInput(job.id, {
+      ore_ids: oreIds
+    });
+
+    // 3. Выполняем расчёт
+    const data = await computeTask1(oreIds);
+
+    // 4. Сохраняем результат
+    await saveJobResult(job.id, "calculator_calc1", data);
+
+    navigate("/app/task1/results");
+
+  } catch (err) {
+    console.error(err);
+    setError(err.message || "Ошибка вычисления");
+  } finally {
+    setComputing(false);
+  }
+};
+
+
+
+  function formatNumberCell(value) {
+    if (value === null || value === undefined) return "-";
+    const num = Number(value);
+    if (isNaN(num)) return "-";
+    return num.toFixed(2);
+  }
+
+
+  const [selected, setSelected] = useState(new Set());
+  function toggleSelect(id) {
+    setSelected(prev => {
+      const copy = new Set(prev);
+      if (copy.has(id)) copy.delete(id);
+      else copy.add(id);
+      return copy;
+    });
+  }
+
 
   return (
     <div className="page-container">
@@ -93,40 +128,50 @@ export default function Task1Compute() {
           <p>У вас пока нет сохранённых руд.</p>
         ) : (
           <>
-            <table className="table-data">
-              <thead>
-                <tr>
-                  <th>№</th>
-                  <th>Название</th>
-                  <th>Cu, %</th>
-                  <th>Fe, %</th>
-                  <th>S, %</th>
-                  <th>SiO₂, %</th>
-                  <th>CaO, %</th>
-                  <th>Al₂O₃, %</th>
-                  <th>As, %</th>
-                  <th>Au, г/т</th>
-                  <th>Ag, г/т</th>
-                </tr>
-              </thead>
-              <tbody>
-                {samples.map((s, idx) => (
-                  <tr key={s.id}>
-                    <td>{idx + 1}</td>
-                    <td>{s.sample_name}</td>
-                    <td>{s.cu_pct}</td>
-                    <td>{s.fe_pct}</td>
-                    <td>{s.s_pct}</td>
-                    <td>{s.sio2_pct}</td>
-                    <td>{s.cao_pct}</td>
-                    <td>{s.al2o3_pct}</td>
-                    <td>{s.as_pct}</td>
-                    <td>{s.au_gpt}</td>
-                    <td>{s.ag_gpt}</td>
+            <div className="table-responsive">
+              <table className="table-data ores-table">
+                <thead>
+                  <tr>
+                    <th>№</th>
+                    <th>Название</th>
+                    <th>Cu, %</th>
+                    <th>Fe, %</th>
+                    <th>S, %</th>
+                    <th>SiO₂, %</th>
+                    <th>CaO, %</th>
+                    <th>Al₂O₃, %</th>
+                    <th>As, %</th>
+                    <th>Au, г/т</th>
+                    <th>Ag, г/т</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {samples.map((s, idx) => (
+                    <tr key={s.id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selected.has(s.id)}
+                        onChange={() => toggleSelect(s.id)}
+                      />
+                    </td>
+                    <td className="cell-index">{idx + 1}</td>
+                    <td className="cell-name">{s.sample_name}</td>
+
+                    <td className="cell-num">{formatNumberCell(s.cu_pct)}</td>
+                    <td className="cell-num">{formatNumberCell(s.fe_pct)}</td>
+                    <td className="cell-num">{formatNumberCell(s.s_pct)}</td>
+                    <td className="cell-num">{formatNumberCell(s.sio2_pct)}</td>
+                    <td className="cell-num">{formatNumberCell(s.cao_pct)}</td>
+                    <td className="cell-num">{formatNumberCell(s.al2o3_pct)}</td>
+                    <td className="cell-num">{formatNumberCell(s.as_pct)}</td>
+                    <td className="cell-num">{formatNumberCell(s.au_gpt)}</td>
+                    <td className="cell-num">{formatNumberCell(s.ag_gpt)}</td>
+                  </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div> 
 
             <button
               className="btn-primary"

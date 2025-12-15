@@ -6,10 +6,16 @@ import { getAuthFromStorage, clearAuth } from "../api/auth";
 import HomeIconBlack from "../assets/home_1.svg";
 import HomeIconWhite from "../assets/home_2.svg";
 
+
+
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { token, user } = getAuthFromStorage();
+
+  const isAdmin =
+    user?.role ==="admin" ||
+    user?.status === "admin";
 
   const isAuthed = Boolean(token && user);
 
@@ -18,6 +24,7 @@ export default function Navbar() {
     { label: "Первая задача", to: "/app/task1" },
     { label: "Вторая задача", to: "/app/task2" },
     { label: "Третья задача", to: "/app/task3" },
+    ...(isAdmin ? [{ label: "Admin", to: "/app/admin" }] : []),
   ];
 
   const submenuConfig = [
@@ -30,13 +37,9 @@ export default function Navbar() {
       {
         title: "Как начать",
         description: "Создайте аккаунт и загрузите свои данные.",
-        to: "/register",
+        to: "/",
       },
-      {
-        title: "Документация",
-        description: "Краткий гайд по шагам ML-пайплайна.",
-        to: "/app/task1/explore",
-      },
+      
     ],
     [
       {
@@ -94,6 +97,7 @@ export default function Navbar() {
         to: "/app/task3/calc3",
       },
     ],
+    
   ];
 
   // по path определяем индекс активного пункта
@@ -103,6 +107,8 @@ export default function Navbar() {
     if (path.startsWith("/app/task1")) return 1;
     if (path.startsWith("/app/task2")) return 2;
     if (path.startsWith("/app/task3")) return 3;
+    if (path.startsWith("/app/admin")) return navItems.length - 1;
+
 
     return 0; // по умолчанию
   };
@@ -125,6 +131,10 @@ export default function Navbar() {
   const handleNavClick = (index) => {
     // клик по табу: только открыть/закрыть подменю + подсветить таб
     setOpenSubmenuIndex((prev) => (prev === index ? null : index));
+    if (!submenuConfig[index] || submenuConfig[index].length === 0) {
+      navigate(navItems[index].to);
+    }
+
   };
 
   const handleLogout = () => {
@@ -136,22 +146,85 @@ export default function Navbar() {
   const currentSubmenu =
     openSubmenuIndex === null ? [] : submenuConfig[openSubmenuIndex] || [];
 
+  const [openProfile, setOpenProfile] = useState(false);
+
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSubmenuIndex, setMobileSubmenuIndex] = useState(null);
+
+
+  const mobileMenu = (
+    <div className={`mobile-menu ${mobileOpen ? "open" : ""}`}>
+      {navItems.map((item, index) => (
+        <div key={item.label}>
+          {/* Кнопка раздела */}
+          <button
+            className="mobile-nav-item"
+            onClick={() => {
+              // если есть подменю — раскрываем
+              if (submenuConfig[index] && submenuConfig[index].length > 0 && item.to !== "/app/admin") {
+                setMobileSubmenuIndex(prev => prev === index ? null : index);
+              } else {
+                navigate(item.to);
+                setMobileOpen(false);
+              }
+            }}
+          >
+            {item.label}
+          </button>
+
+          {/* Подменю */}
+          {mobileSubmenuIndex === index && (
+            <div className="mobile-submenu">
+              {submenuConfig[index].map(sub => (
+                <button
+                  key={sub.title}
+                  className="mobile-submenu-item"
+                  onClick={() => {
+                    navigate(sub.to);
+                    setMobileOpen(false);
+                    setMobileSubmenuIndex(null);
+                  }}
+                >
+                  {sub.title}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+
+
+      {isAuthed ? (
+        <button className="mobile-logout" onClick={() => { setMobileOpen(false); handleLogout();}}>
+          Выйти
+        </button>
+      ) : (
+        <button className="mobile-login" onClick={() => { setMobileOpen(false); navigate("/login"); }} >
+          Войти
+        </button>
+      )}
+    </div>
+  );
+
+
+
   return (
     <>
       <header className="site-header">
         <div className="site-header-inner">
+
           {/* ЛОГО */}
           <div
             className="logo"
             onClick={() => {
               navigate("/");
-              // activeIndex и подменю синхронизируются через useEffect по location
             }}
           >
             CI
           </div>
 
-          {/* GOOEY NAV */}
+          {/* NAVBAR (десктоп) */}
           <div className="center-nav">
             <GooeyNav
               items={navItems.map((i, index) => ({
@@ -170,32 +243,69 @@ export default function Navbar() {
             />
           </div>
 
-          {/* АВТОРИЗАЦИЯ */}
+          {/* БУРГЕР-ТОЛЬКО МОБИЛЬНЫЙ */}
+          <button
+            className="burger-btn"
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            ☰
+          </button>
+
+          {/* AUTH BLOCK */}
           <div className="auth-block">
             {isAuthed ? (
-              <>
-                <span className="user-name">{user.full_name}</span>
-                <button className="btn-secondary" onClick={handleLogout}>
-                  Выйти
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="link-muted">
-                  Войти
-                </Link>
-                <Link
-                  to="/register"
-                  className="btn-primary"
-                  style={{ marginLeft: 12 }}
+              <div className="profile-dropdown-wrapper">
+                <button
+                  className="profile-btn"
+                  onClick={() => setOpenProfile((v) => !v)}
                 >
-                  Регистрация
-                </Link>
-              </>
+                  <span className="profile-avatar">
+                    {user.full_name?.[0]?.toUpperCase()}
+                  </span>
+                  <span>{user.full_name}</span>
+                  <span className="arrow">▾</span>
+                </button>
+
+                {openProfile && (
+                  <div className="profile-card">
+                    <div className="pc-avatar">
+                      {user.full_name?.[0]?.toUpperCase()}
+                    </div>
+
+                    <div className="pc-name">{user.full_name}</div>
+                    <div className="pc-email">{user.email}</div>
+
+                    <hr className="pc-divider" />
+
+                    <div className="pc-row">
+                      <span>Роль:</span>
+                      <b>{user.role}</b>
+                    </div>
+
+                    <div className="pc-row">
+                      <span>Статус:</span>
+                      <b>{user.status}</b>
+                    </div>
+
+                    <button className="pc-logout" onClick={handleLogout}>
+                      Выйти
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/login" className="btn-primary">
+                Войти
+              </Link>
             )}
           </div>
+
         </div>
       </header>
+
+      {/* Мобильное меню ВНЕ header */}
+      {mobileMenu}
+
 
       {/* ПОДМЕНЮ */}
       {currentSubmenu.length > 0 && (

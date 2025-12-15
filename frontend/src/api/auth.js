@@ -1,6 +1,5 @@
 // frontend/src/api/auth.js
-const host = window.location.hostname; // localhost или 192.168.56.1 и т.п.
-export const API_URL = `http://${host}:4000`;
+export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 export async function registerUser({ full_name, email, password }) {
   const res = await fetch(`${API_URL}/api/auth/register`, {

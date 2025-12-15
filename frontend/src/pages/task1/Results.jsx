@@ -1,58 +1,88 @@
-// src/pages/task1/Results.jsx
 import { useEffect, useState } from "react";
+import { loadJobResults, deleteJobResult } from "../../api/jobs";
 
 export default function Task1Results() {
-  const [data, setData] = useState(null);
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const raw = sessionStorage.getItem("task1_last_results");
-    if (raw) {
-      try {
-        setData(JSON.parse(raw));
-      } catch {
-        setData(null);
-      }
-    }
+    load();
   }, []);
 
-  if (!data) {
-    return (
-      <div className="page-container">
-        <h1>Результаты вычислений</h1>
-        <p>Нет данных для отображения. Запустите расчёт на предыдущем шаге.</p>
-      </div>
-    );
+  async function load() {
+    try {
+      const all = await loadJobResults();
+
+      // берём только calculator_calc1
+      const task1 = all.filter(r => r.task_type === "calculator_calc1");
+
+      setResults(task1);
+    } catch (err) {
+      console.error(err);
+      setError("Ошибка загрузки результатов");
+    } finally {
+      setLoading(false);
+    }
   }
+
+  async function handleDelete(id) {
+    if (!window.confirm("Удалить этот результат?")) return;
+
+    try {
+      await deleteJobResult(id);
+
+      // Обновляем список
+      setResults(prev => prev.filter(r => r.id !== id));
+    } catch (err) {
+      console.error(err);
+      setError("Ошибка удаления");
+    }
+  }
+
+  if (loading) return <p>Загрузка...</p>;
+  if (results.length === 0) return <p>Нет сохранённых результатов.</p>;
 
   return (
     <div className="page-container">
       <h1>Результаты вычислений</h1>
 
       <section className="card" style={{ marginTop: 24 }}>
-        <h2>Параметры руд</h2>
-        {/* можно повторить таблицу с исходными данными */}
-      </section>
-
-      <section className="card" style={{ marginTop: 24 }}>
         <h2>Рассчитанные параметры</h2>
-        <table className="table-data">
+        <div className="table-responsive">
+        <table className="table-data ores-table">
           <thead>
             <tr>
+              <th>Дата</th>
               <th>Название</th>
-              <th>Основность шлака  </th>
+              <th>Основность шлака</th>
               <th>Нагрузка по сере, %</th>
+              <th></th>
             </tr>
           </thead>
+
           <tbody>
-            {data.results.map((r) => (
-              <tr key={r.sample_id}>
-                <td>{r.sample_name}</td>
-                <td>{r.slag_basicity ?? "—"}</td>
-                <td>{r.sulphur_load}</td>
-              </tr>
+            {results.map(r => (
+              r.payload.results.map(item => (
+                <tr key={item.sample_id + "_" + r.id}>
+                  <td>{new Date(r.created_at).toLocaleString()}</td>
+                  <td>{item.sample_name}</td>
+                  <td>{item.slag_basicity ?? "—"}</td>
+                  <td>{item.sulphur_load}</td>
+                  <td>
+                    <button
+                      className="btn-secondary"
+                      onClick={() => handleDelete(r.id)}
+                    >
+                      Удалить
+                    </button>
+                  </td>
+                </tr>
+              ))
             ))}
           </tbody>
         </table>
+        </div>
       </section>
     </div>
   );
