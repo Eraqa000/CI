@@ -12,7 +12,8 @@ export async function predictForward(req, res) {
   const pythonScript = path.join(__dirname, "../python/predict_matte_slag.py");
 
   const py = execFile(
-    "python",
+    // На Render установлен только python3 без алиаса "python"
+    process.env.PYTHON_BIN || "python3",
     [pythonScript],
     { maxBuffer: 1024 * 1024 },
     (err, stdout, stderr) => {
