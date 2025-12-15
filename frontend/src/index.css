@@ -433,7 +433,7 @@ a:hover {
 }
 nav {
   overflow: hidden !important;
-}*/
+}
 .gooey-nav-container {
   position: relative;
   height: 48px; /* фиксируем высоту линии меню */
